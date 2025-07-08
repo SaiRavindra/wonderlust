@@ -8,6 +8,10 @@ const ExpressError = require("../utils/ExpressError.js");
 const {listingSchema,reviewSchema} = require("../schema.js");
 const {isLoggedIn,isOwner} = require("../middleware.js");//exports so {} to require
 
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
+
 
 router.get("/",wrapAsync(async (req,res)=>
 {
@@ -76,7 +80,7 @@ const validateListing = (req,res,next) =>
   }
 }
 
-router.post("/",validateListing,wrapAsync(async (req,res,next)=>
+router.post("/",upload.single("listing[image]"),validateListing,wrapAsync(async (req,res,next)=>
 {
   // listingSchema.validate(req.body); no need as we are  passing middleware
   //we are using listing schema .validate so commenting this
@@ -84,8 +88,11 @@ router.post("/",validateListing,wrapAsync(async (req,res,next)=>
   // {
   //   throw new ExpressError(400,"send valid data for listing");
   // }
+  let url = req.file.path;
+  let filename = req.file.filename;
   let newlisting = new Listing(req.body.listing);
   newlisting.owner = req.user._id;
+  newlisting.image = {url,filename};
   await newlisting.save();
   req.flash("success","new listing added");
   res.redirect("/listings");

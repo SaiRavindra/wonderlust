@@ -6,6 +6,11 @@
       <div class="col-md-8 mx-auto">
         <h3 class="mb-4 text-center">Listing Details</h3>
         <div class="list-group">
+
+          <li class="list-group-item text-center">
+          <img src="<%= listing.image.url %>" alt="Listing Image" class="img-fluid rounded" style="max-height: 300px;" />
+          </li>
+          
           <li class="list-group-item">
             <strong>Owner :</strong> <%= listing.owner.username %>
           </li>

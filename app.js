@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -12,7 +17,7 @@ const flash = require("express-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-require("dotenv").config();
+
 
 const dbUrl = process.env.ATLASDB_URL;
 

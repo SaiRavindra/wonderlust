@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-6 mx-auto">
         <h3 class="mb-4 text-center">Fill the details</h3>
-        <form method="POST" action="/listings" novalidate class="needs-validation">
+        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
 
           <div class="mb-3">
             <label for="title" class="form-label">Title</label>
@@ -19,12 +19,12 @@
             <textarea name="listing[description]" id="description" placeholder="Enter description" class="form-control"  required></textarea>
             <div class="invalid-feedback">
             Please provide description
-          </div>
+            </div>
           </div>
 
           <div class="mb-3">
-            <label for="image" class="form-label">Image URL</label>
-            <input name="listing[image]" id="image" placeholder="Enter image URL" type="text" class="form-control"   />
+            <label for="image" class="form-label">Upload the Image</label>
+            <input name="listing[image]" id="image" placeholder="Enter image URL" type="file" class="form-control"   />
             
           </div>
 
