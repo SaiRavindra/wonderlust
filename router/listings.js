@@ -10,6 +10,8 @@ const {isLoggedIn,isOwner} = require("../middleware.js");//exports so {} to requ
 
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
+const { cloudinary } = require("../cloudConfig.js");
+
 const upload = multer({ storage });
 
 
@@ -115,14 +117,36 @@ router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(async (req,res)=>
 
 //update route
 
-router.put("/:id",validateListing,isLoggedIn,isOwner, wrapAsync(async (req, res, next) => {
+router.put("/:id",upload.single("image"),validateListing,isLoggedIn,isOwner, wrapAsync(async (req, res, next) => {
   let { id } = req.params;
   //as validation listing we dont need this
   // if(!req.body || !req.body.listing)
   // {
   //   throw new ExpressError(400,"send valid data for listing");
   // }
-  let updatedListing = await Listing.findByIdAndUpdate(id, req.body.listing);
+
+   const listing = await Listing.findById(id);
+
+  // Update form fields manually
+  
+  listing.title = req.body.listing.title;
+  listing.description = req.body.listing.description;
+  listing.price = req.body.listing.price;
+  listing.location = req.body.listing.location;
+  listing.country = req.body.listing.country;
+
+  // Update image if new image uploaded
+  if (req.file) {
+    if (listing.image && listing.image.filename) {
+      await cloudinary.uploader.destroy(listing.image.filename);
+    }
+    listing.image = {
+      url: req.file.path,
+      filename: req.file.filename
+    };
+  }
+
+  await listing.save();
   req.flash("success","Listing updated");
   res.redirect("/listings");
 }));

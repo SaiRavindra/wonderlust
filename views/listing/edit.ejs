@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-6 mx-auto">
         <h3 class="mb-4 text-center">Edit Listing</h3>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
 
           <div class="mb-3">
             <label for="title" class="form-label">Title</label>
@@ -23,11 +23,10 @@
           </div>
 
           <div class="mb-3">
-            <label for="image" class="form-label">Image URL</label>
-            <input name="listing[image]" id="image" value="<%= listing.image %>" type="text" class="form-control" required/>
-             <div class="invalid-feedback">
-            Please provide image url
+            <label for="image" class="form-label">Change Image</label>
+            <input name="image" id="image" type="file" class="form-control" />
           </div>
+
           </div>
 
           <div class="row mb-3">
